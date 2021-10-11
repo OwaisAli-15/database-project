@@ -136,14 +136,14 @@
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white">
                 </div>
                 <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-4">
-                    <label for="date-ba0f" class="u-label">Check In Date</label>
-                    <input type="date" placeholder="Check in Date" id="date-ba0f" name="date"
+                    <label for="date-ba0f"  class="u-label">Check In Date</label>
+                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check in Date" id="date-ba0f" name="date"
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white"
                            required="required">
                 </div>
                 <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-5">
                     <label for="date-65d1" class="u-label">Check Out Date</label>
-                    <input type="date" placeholder="Check out Date" id="date-65d1" name="date-1"
+                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check out Date" id="date-65d1" name="date-1"
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white"
                            required="required">
                 </div>
@@ -244,18 +244,28 @@
 var preIndate;
 var preOutdate;
 
- var InDate = document.getElementById("date-65d1").value;
+ var InDate = document.getElementById("date-65d1").value ;
         var outDate = document.getElementById("date-ba0f").value;
 
  var refresh;
 
 function getRooms(){
-         InDate = document.getElementById("date-65d1").value;
-         outDate = document.getElementById("date-ba0f").value;
+         InDate = document.getElementById("date-65d1").value  ;
+         outDate = document.getElementById("date-ba0f").value  ;
 
         if (InDate == "" || outDate == ""){
             alert("Set up the dates first");
          } else {
+
+
+        var indo =InDate.split('-');
+        var out =outDate.split('-');
+        // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
+        // January - 0, February - 1, etc.
+        var inD = new Date(indo[0], indo[1] - 1, indo[2]);
+        var outD = new Date(out[0], out[1] - 1, out[2]);
+        console.log("inD: " + inD.toDateString());
+        console.log("outD: " + outD.toDateString());
 
         socket.emit('message', {'checkin': InDate, 'checkOut' : outDate} );
 
@@ -270,8 +280,8 @@ function getRooms(){
             preIndate = InDate;
             preOutdate = outDate;
 
-             console.log(preIndate + " -> " + InDate);
-            console.log(preOutdate + " -> " + outDate);
+             console.log(preIndate + " -> " + InDate );
+            console.log(preOutdate + " -> " + outDate );
             console.log(InDate != preIndate || outDate != preOutdate);
 
             refresh = true;

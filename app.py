@@ -48,8 +48,11 @@ print ("Opened database successfully")
 
 @socketio.on('message')
 def handleMessage(date):
+
+    print(date)
+
     allrooms = bd.execute(
-        "Select room.roomid, room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room, roomtype where roomtype.roomtypeid = room.roomtypeid").fetchall()
+        "Select room.roomid, room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room, roomtype, roomres where roomtype.roomtypeid = room.roomtypeid ", ([])).fetchall() #and checkin < ? and checkout > ?
     bd.commit()
     if (allrooms is not None):
         for a in allrooms:
@@ -477,7 +480,7 @@ def execute():
     #     "CREATE table roomres (roomresid INTEGER Primary Key, roomid text, checkin datetime , checkout datetime, reservationid integer);")
     # bd.commit()
 
-    bd.execute("Insert into room_res")
+    bd.execute("Insert into roomres (roomid, checkin, checkout, reservationid) values (?,?,?,?)", ([3, '02-01-2021', '10-10-2021', 1]))
     a = bd.execute("select * from room").fetchall()
     for b in a:
         print(a)
