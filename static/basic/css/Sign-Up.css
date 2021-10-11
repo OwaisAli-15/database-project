@@ -1,0 +1,153 @@
+.u-section-1 .u-sheet-1 {
+  min-height: 50vw;
+}
+
+.u-section-1 .u-text-1 {
+  margin: 103px auto 0 106px;
+}
+
+.u-section-1 .u-form-1 {
+  height: 644px;
+  margin: 43px 296px 8px 237px;
+}
+
+.u-section-1 .u-label-1 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-1 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-label-2 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-2 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-3 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-3 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-3 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-4 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-4 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-4 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-5 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-5 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-5 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-6 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-6 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-6 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-7 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-7 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-7 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-8 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-8 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-8 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-9 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-9 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-9 {
+  font-size: 1.5rem;
+}
+
+.u-section-1 .u-form-group-10 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-label-10 {
+  letter-spacing: 1px;
+}
+
+.u-section-1 .u-input-10 {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1199px) {
+  .u-section-1 .u-form-1 {
+    width: 570px;
+    margin-left: 137px;
+    margin-right: 196px;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-1 .u-form-1 {
+    margin-left: 27px;
+    margin-right: 86px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-1 .u-form-1 {
+    width: 540px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-1 .u-form-1 {
+    width: 340px;
+  }
+}
