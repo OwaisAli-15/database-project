@@ -160,18 +160,22 @@ def login():
         for a in bd.execute("select identification, password from newguests;").fetchall():
             print(a)
 
+        if (checkuser is None):
+            return redirect(url_for('register'))
 
-
-        return  redirect("/")
+        return  redirect(url_for('reservation'))
 
 
 @app.route('/reservation', methods=["GET", "POST"])
 def reservation():
     if request.method == "GET":
 
-        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout from room")
+        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout from roomres join room on roomres.roomid = room.roomid join reservation on reservation.reservationid = roomres.reservationid").fetchall()
 
-        return render_template("reservation.html")
+        for a in allbookings:
+            print(a)
+
+        return render_template("reservation.html", allbookings=allbookings)
     else:
 
         cnic = request.form.get('name')
