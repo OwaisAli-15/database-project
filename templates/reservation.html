@@ -250,8 +250,8 @@ var preOutdate;
  var refresh;
 
 function getRooms(){
-         InDate = document.getElementById("date-65d1").value  ;
-         outDate = document.getElementById("date-ba0f").value  ;
+         InDate = document.getElementById("date-ba0f").value  ;
+         outDate = document.getElementById("date-65d1").value  ;
 
         if (InDate == "" || outDate == ""){
             alert("Set up the dates first");
@@ -270,7 +270,7 @@ function getRooms(){
         socket.emit('message', {'checkin': InDate, 'checkOut' : outDate} );
 
         socket.on('gotrooms', data => {
-            console.log(JSON.stringify(data["rooms"][0]));
+            console.log(JSON.stringify(data["rooms"]));
 
             select = document.getElementById('select-03a1');
 
@@ -315,7 +315,7 @@ function getRooms(){
             {
                 var opt = document.createElement('option');
                 opt.value = data["rooms"][i][0];
-                opt.innerHTML = data["rooms"][i][1];
+                opt.innerHTML = data["rooms"][i];
                 console.log(data["rooms"][1]);
                 select.appendChild(opt);
             }

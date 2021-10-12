@@ -51,13 +51,36 @@ def handleMessage(date):
 
     print(date)
 
+    print("YOLO: ", datetime.strptime(date["checkin"], '%Y-%m-%d').strftime('%D-%M-%Y'))
+
+
+    checkindate  = date["checkin"].replace('-', '')
+    print(checkindate)
+
+    datetimeobject = datetime.strptime(checkindate, '%Y%m%d')
+    print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
+    checkindateSet = datetimeobject.strftime('%d-%m-%Y')
+
+
     allrooms = bd.execute(
-        "Select room.roomid, room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room, roomtype, roomres where roomtype.roomtypeid = room.roomtypeid ", ([])).fetchall() #and checkin < ? and checkout > ?
+        "Select room.roomname from room join roomtype on roomtype.roomtypeid = room.roomtypeid").fetchall() #and roomres.checkin < ? and roomres.checkout > ?
+
     bd.commit()
+    reservedrooms = bd.execute("Select room.roomname from room left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", ([checkindateSet, checkindateSet])).fetchall()
+    bd.commit()
+    for a in reservedrooms:
+        print("RESERVED: ", a[0])
+        if a in allrooms:
+            print("REMOVING")
+            allrooms.remove(a)
+        print("Type: ", type(a))
+    print(reservedrooms)
+
     if (allrooms is not None):
         for a in allrooms:
             print("ATYO:", a)
     print('Message: ' + json.dumps(date) )
+    print("rooms: ", allrooms)
 
     date = allrooms
 
@@ -480,8 +503,12 @@ def execute():
     #     "CREATE table roomres (roomresid INTEGER Primary Key, roomid text, checkin datetime , checkout datetime, reservationid integer);")
     # bd.commit()
 
-    bd.execute("Insert into roomres (roomid, checkin, checkout, reservationid) values (?,?,?,?)", ([3, '02-01-2021', '10-10-2021', 1]))
-    a = bd.execute("select * from room").fetchall()
+    # bd.execute("Insert into roomres (roomid, checkin, checkout, reservationid) values (?,?,?,?)", ([3, '02-01-2021', '10-10-2021', 1]))
+
+    for a in bd.execute("Select room.roomid, roomres.checkin, roomres.checkout,  room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room join roomtype on roomtype.roomtypeid = room.roomtypeid left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", (["10-10-2021", "10-10-2021"])).fetchall():
+        print("Worko: ", a)
+
+    a = bd.execute("select * from roomres").fetchall()
     for b in a:
         print(a)
     bd.commit()
