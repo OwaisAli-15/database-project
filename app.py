@@ -63,15 +63,16 @@ def handleMessage(date):
 
 
     allrooms = bd.execute(
-        "Select room.roomname from room join roomtype on roomtype.roomtypeid = room.roomtypeid").fetchall() #and roomres.checkin < ? and roomres.checkout > ?
+        "Select room.roomname, room.roomid from room join roomtype on roomtype.roomtypeid = room.roomtypeid").fetchall() #and roomres.checkin < ? and roomres.checkout > ?
 
     bd.commit()
-    reservedrooms = bd.execute("Select room.roomname from room left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", ([checkindateSet, checkindateSet])).fetchall()
+    reservedrooms = bd.execute("Select room.roomname, room.roomid from room left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", ([checkindateSet, checkindateSet])).fetchall()
     bd.commit()
     for a in reservedrooms:
+        print("a: ", a)
         print("RESERVED: ", a[0])
         if a in allrooms:
-            print("REMOVING")
+            print("REMOVING: ", allrooms)
             allrooms.remove(a)
         print("Type: ", type(a))
     print(reservedrooms)
@@ -167,6 +168,9 @@ def login():
 @app.route('/reservation', methods=["GET", "POST"])
 def reservation():
     if request.method == "GET":
+
+        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout from room")
+
         return render_template("reservation.html")
     else:
 
@@ -184,11 +188,26 @@ def reservation():
         print("checkin: ", checkin)
         print("room: ", room)
 
+
+        checkin = checkin.replace('-', '')
+        checkout = checkout.replace('-', '')
+        print(checkin)
+
+        datetimeobject = datetime.strptime(checkin, '%Y%m%d')
+        datetimeobject2 = datetime.strptime(checkout, '%Y%m%d')
+        print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
+        checkindateSet = datetimeobject.strftime('%d-%m-%Y')
+        checkoutdateSet = datetimeobject2.strftime('%d-%m-%Y')
+
+        print("CHECK IN:", checkindateSet, "\nCHECK OUT: ", checkoutdateSet)
+
         bd.execute("insert into reservation (purposeofvisit, reference, identification) values (?, ?, ?);", ([pov, reference, cnic]))
-        id = bd.execute("SELECT * FROM reservation where identification=? ORDER BY reservationDate DESC LIMIT 1; ").fetchone()
+        id = bd.execute("SELECT * FROM reservation where identification=? LIMIT 1;", ([cnic])).fetchone()
         bd.commit()
 
-        bd.execute("insert into roomres (roomid, checkin, checkout, reservationid) values (?, ?, ?, ?) ", ([room[0], checkin, checkout, id]))
+        print("Last reservation: ", id)
+
+        bd.execute("insert into roomres (roomid, checkin, checkout, reservationid) values (?, ?, ?, ?) ", ([room[0], checkindateSet, checkoutdateSet, int(id[0])]))
         bd.commit()
 
 

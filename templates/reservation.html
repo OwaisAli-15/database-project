@@ -314,8 +314,8 @@ function getRooms(){
             for (var i = 0; i < data["rooms"].length; i++)
             {
                 var opt = document.createElement('option');
-                opt.value = data["rooms"][i][0];
-                opt.innerHTML = data["rooms"][i];
+                opt.value = data["rooms"][i][1];
+                opt.innerHTML = data["rooms"][i][0];
                 console.log(data["rooms"][1]);
                 select.appendChild(opt);
             }
