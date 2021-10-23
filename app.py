@@ -353,6 +353,15 @@ def Room():
         return redirect (url_for('Room'))
 
 
+@app.route('/servicehistory', methods=["GET", "POST"])
+def customer():
+    return render_template("service-history.html")
+
+
+
+
+
+
 '''
 @app.route('/room', methods=["GET", "POST"])
 def Room():
@@ -528,10 +537,10 @@ def execute():
 
     # bd.execute("Insert into roomres (roomid, checkin, checkout, reservationid) values (?,?,?,?)", ([3, '02-01-2021', '10-10-2021', 1]))
 
-    for a in bd.execute("Select room.roomid, roomres.checkin, roomres.checkout,  room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room join roomtype on roomtype.roomtypeid = room.roomtypeid left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", (["10-10-2021", "10-10-2021"])).fetchall():
-        print("Worko: ", a)
+    # for a in bd.execute("Select room.roomid, roomres.checkin, roomres.checkout,  room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room join roomtype on roomtype.roomtypeid = room.roomtypeid left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", (["10-10-2021", "10-10-2021"])).fetchall():
+    #     print("Worko: ", a)
 
-    a = bd.execute("select * from roomres").fetchall()
+    a = bd.execute("delete from roomres").fetchall()
     for b in a:
         print(a)
     bd.commit()
