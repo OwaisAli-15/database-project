@@ -54,19 +54,22 @@ def handleMessage(date):
     print("YOLO: ", datetime.strptime(date["checkin"], '%Y-%m-%d').strftime('%D-%M-%Y'))
 
 
-    checkindate  = date["checkin"].replace('-', '')
-    print(checkindate)
+    # checkindate  = date["checkin"].replace('-', '')
+    # checkoutdate  = date["checkOut"].replace('-', '')
+    # print(checkindate)
 
-    datetimeobject = datetime.strptime(checkindate, '%Y%m%d')
-    print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
-    checkindateSet = datetimeobject.strftime('%d-%m-%Y')
+    # datetimeobject = datetime.strptime(checkindate, '%Y%m%d')
+    # print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
+    checkindateSet = datetime.strptime(date["checkOut"].replace('-', ''), '%Y%m%d').strftime('%d-%m-%Y')
+    checkoutdateSet = datetime.strptime(date["checkin"].replace('-', ''), '%Y%m%d').strftime('%d-%m-%Y')
 
 
     allrooms = bd.execute(
         "Select room.roomname, room.roomid from room join roomtype on roomtype.roomtypeid = room.roomtypeid").fetchall() #and roomres.checkin < ? and roomres.checkout > ?
 
     bd.commit()
-    reservedrooms = bd.execute("Select room.roomname, room.roomid from room left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", ([checkindateSet, checkindateSet])).fetchall()
+    reservedrooms = bd.execute("Select room.roomname, room.roomid from room left join roomres on room.roomid = roomres.roomid where (? >= roomres.checkin and ? <= roomres.checkout) or (? >= roomres.checkin and ? <= roomres.checkout) or (? <= roomres.checkin and ? >= checkout)", ([date["checkin"], date["checkin"], date["checkOut"], date["checkOut"], date["checkin"], date["checkOut"]])).fetchall()
+    # reservedrooms = bd.execute("Select room.roomname, room.roomid from room left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", ([checkindateSet, checkindateSet])).fetchall()
     bd.commit()
     for a in reservedrooms:
         print("a: ", a)
@@ -193,12 +196,12 @@ def reservation():
         print("room: ", room)
 
 
-        checkin = checkin.replace('-', '')
-        checkout = checkout.replace('-', '')
-        print(checkin)
+        checkin2 = checkin.replace('-', '')
+        checkout2 = checkout.replace('-', '')
+        print(checkin2)
 
-        datetimeobject = datetime.strptime(checkin, '%Y%m%d')
-        datetimeobject2 = datetime.strptime(checkout, '%Y%m%d')
+        datetimeobject = datetime.strptime(checkin2, '%Y%m%d')
+        datetimeobject2 = datetime.strptime(checkout2, '%Y%m%d')
         print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
         checkindateSet = datetimeobject.strftime('%d-%m-%Y')
         checkoutdateSet = datetimeobject2.strftime('%d-%m-%Y')
@@ -206,12 +209,14 @@ def reservation():
         print("CHECK IN:", checkindateSet, "\nCHECK OUT: ", checkoutdateSet)
 
         bd.execute("insert into reservation (purposeofvisit, reference, identification) values (?, ?, ?);", ([pov, reference, cnic]))
-        id = bd.execute("SELECT * FROM reservation where identification=? LIMIT 1;", ([cnic])).fetchone()
+        bd.commit()
+
+        id = bd.execute("SELECT * FROM reservation order by reservationid desc LIMIT 1;").fetchone()
         bd.commit()
 
         print("Last reservation: ", id)
 
-        bd.execute("insert into roomres (roomid, checkin, checkout, reservationid) values (?, ?, ?, ?) ", ([room[0], checkindateSet, checkoutdateSet, int(id[0])]))
+        bd.execute("insert into roomres (roomid, checkin, checkout, reservationid) values (?, ?, ?, ?) ", ([room[0], checkin, checkout, int(id[0])]))
         bd.commit()
 
 
@@ -354,9 +359,133 @@ def Room():
 
 
 @app.route('/servicehistory', methods=["GET", "POST"])
-def customer():
-    return render_template("service-history.html")
+def servicehistory():
+    if request.method == 'GET':
 
+        allres = bd.execute(
+            "select reservationid, roomname from reservation join roomres using (reservationid) join room using (roomid) where checkin <= DATE('now') and checkout >= DATE('now')"
+        ).fetchall()
+
+        print("Allres:", allres)
+
+        allser = bd.execute(
+            "select serviceid, servicename, servicecharges from services"
+        ).fetchall()
+
+        return render_template("service-history.html", allres=allres, allser=allser)
+
+    else:
+        reservation = request.form.get('select-1')
+        service = request.form.get('select')
+        dprice = request.form.get('dprice')
+        quantity = request.form.get('quantity')
+
+
+        bd.execute(
+            "insert into servicehistory (serviceid, reservationid, quantity) values (?,?,?)",
+            ([service, reservation, quantity])
+        )
+        bd.commit()
+
+        return redirect(url_for('servicehistory'))
+
+
+
+
+@app.route('/externalservice', methods=["GET", "POST"])
+def externalservice():
+    if request.method == 'GET':
+
+        allres = bd.execute(
+            "select reservationid, roomname from reservation join roomres using (reservationid) join room using (roomid) where checkin <= DATE('now') and checkout >= DATE('now')"
+        ).fetchall()
+
+        return render_template("externalservice.html", allres=allres)
+
+    else:
+        reservation = request.form.get('select-1')
+        name = request.form.get('servicename')
+        rate = request.form.get('servicecharges')
+        quantity = request.form.get('text')
+        provider = request.form.get('text-1')
+        id = request.form.get('text-2')
+
+        bd.execute(
+            "insert into externalservice (reservationid, externalservicename, externalservicerate, externalservicequantity, externalserviceprovider, exRecieptID) values (?,?,?,?,?,?)",
+            ([reservation, name, rate, quantity, provider, id])
+        )
+        bd.commit()
+
+        return redirect(url_for('externalservice'))
+
+
+
+@app.route('/bill', methods=["GET", "POST"])
+def bill():
+    if request.method == 'GET':
+
+        allres = bd.execute(
+            "select reservationid, roomname, checkin, checkout from reservation join roomres using (reservationid) join room using (roomid)"
+        ).fetchall()
+        bd.commit()
+        print("Allres: ", allres)
+
+        return render_template("bill.html", allres=allres)
+
+    else:
+        reservation = request.form.get('select')
+        print("ID:", reservation)
+
+        allres = bd.execute(
+            "select reservationid, roomname, checkin, checkout from reservation join roomres using (reservationid) join room using (roomid)"
+        ).fetchall()
+        bd.commit()
+
+        dates = bd.execute(
+                "SELECT roomname, typename, standardprice, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) as noofdays, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) * standardprice  FROM 'roomres' join 'room' using (roomid) join 'roomtype' using (roomtypeid) where roomres.reservationid = ?",
+            ([reservation])
+        ).fetchall()
+        bd.commit()
+
+        services = bd.execute(
+            " select quantity, servicename, servicecharges from servicehistory join services using (serviceid) where reservationid = ?",
+            ([reservation])
+        ).fetchall()
+
+        extservice = bd.execute(
+            "select externalservicequantity, externalservicename, externalservicerate from externalservice where reservationid = ?",
+            ([reservation])
+        ).fetchall()
+
+        print("DATE:", extservice)
+
+        return render_template('bill.html', dates=dates, allres=allres, services=services, extservice=extservice)
+
+
+@app.route('/servicecharges', methods=["GET", "POST"])
+def servicecharges():
+    if request.method == 'GET':
+
+        allservices = bd.execute(
+            "select * from services"
+        ).fetchall()
+        print(allservices)
+        return render_template("ServiceCharges.html", allservices=allservices)
+    else:
+        servicename = request.form.get('servicename')
+        servicecharges = request.form.get('servicecharges')
+        status = request.form.get('select')
+
+        print("servicename: ", servicename)
+        print("servicecharges: ", servicecharges)
+        print("status: ", status)
+
+        bd.execute(
+            "insert into services (servicename, servicecharges, status) values (?,?,?) ", ([servicename, servicecharges, status])
+        )
+        bd.commit()
+
+        return redirect(url_for('servicecharges'))
 
 
 
@@ -531,19 +660,25 @@ def execute():
     # bd.commit();
 
     # bd.execute("Drop table room;")
-    # bd.execute(
-    #     "CREATE table roomres (roomresid INTEGER Primary Key, roomid text, checkin datetime , checkout datetime, reservationid integer);")
-    # bd.commit()
+
 
     # bd.execute("Insert into roomres (roomid, checkin, checkout, reservationid) values (?,?,?,?)", ([3, '02-01-2021', '10-10-2021', 1]))
 
     # for a in bd.execute("Select room.roomid, roomres.checkin, roomres.checkout,  room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room join roomtype on roomtype.roomtypeid = room.roomtypeid left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", (["10-10-2021", "10-10-2021"])).fetchall():
     #     print("Worko: ", a)
 
-    a = bd.execute("delete from roomres").fetchall()
+    a = bd.execute("Delete from reservation;").fetchall()
+    a = bd.execute("Delete from  roomres;").fetchall()
+    a = bd.execute("Delete from  servicehistory;").fetchall()
+
     for b in a:
         print(a)
+
     bd.commit()
+
+    # bd.execute(
+    #     "CREATE table externalservice (externalserviceid INTEGER Primary Key, externalservicename text, externalservicerate Integer , externalservicequantity Integer, externalserviceprovider text, exRecieptID Integer);")
+    # bd.commit()
 
     print("Dont!")
     return redirect('/')
@@ -565,7 +700,16 @@ def execute():
        print(a)
    bd.commit()
    '''
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
+@app.route('/shutdown', methods=['GET'])
+def shutdown():
+    shutdown_server()
+    return 'Server shutting down...'
 
 if __name__ == '__main__':
     socketio.run(app, host="127.0.0.1", port=5000, debug=True)

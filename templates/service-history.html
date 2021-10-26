@@ -63,14 +63,18 @@
     <section class="u-clearfix u-section-1" id="sec-b09d">
       <div class="u-clearfix u-image u-sheet u-image-1" data-image-width="1280" data-image-height="853">
         <div class="u-form u-form-1">
-          <form action="" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
+          <form action="/servicehistory" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
             <div class="u-form-group u-form-select u-form-group-1">
               <label for="select-38e4" class="u-form-control-hidden u-label"></label>
               <div class="u-form-select-wrapper">
                 <select id="select-38e4" name="select-1" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
                   <option value="Select Active Reservation">Select Active Reservation</option>
-                  <option value="Item 2">Item 2</option>
-                  <option value="Item 3">Item 3</option>
+                  {% for oneres in allres %}
+
+                  <option value="{{oneres[0]}}">{{oneres[1]}}</option>
+
+                  {% endfor %}
+
                 </select>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
               </div>
@@ -80,8 +84,13 @@
               <div class="u-form-select-wrapper">
                 <select id="select-be92" name="select" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="required">
                   <option value="Select Room Service">Select Room Service</option>
-                  <option value="Available">Available</option>
-                  <option value="Unavailable">Unavailable</option>
+
+                  {% for oneser in allser %}
+
+                  <option value="{{oneser[0]}}">{{oneser[1]}} Rs.{{oneser[2]}}/-</option>
+
+                  {% endfor %}
+
                 </select>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
               </div>
@@ -89,6 +98,10 @@
             <div class="u-form-group u-form-partition-factor-2 u-form-group-3">
               <label for="text-cdb6" class="u-form-control-hidden u-label"></label>
               <input type="text" id="text-cdb6" name="dprice" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" placeholder="Discounted Price">
+            </div>
+            <div class="u-form-group u-form-name">
+              <label for="name-f6ed" class="u-form-control-hidden u-label"></label>
+              <input type="text" placeholder="Insert Quantity" id="name-f6ed" name="quantity" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="required">
             </div>
             <div class="u-align-center u-form-group u-form-submit">
               <a href="#" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-4-base u-radius-14 u-btn-1">Submit</a>
