@@ -7,6 +7,14 @@
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>reservation</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/nicepage.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/Log-In.css') }}" media="screen">
     <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/jquery.js') }}"
@@ -32,7 +40,8 @@
 <header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-gradient u-header u-header" id="sec-9c83">
     <div class="u-clearfix u-sheet u-sheet-1">
         <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="315" data-image-height="309">
-            <img src="{{ url_for('static', filename='basic/images/BUITEMS_logo.png') }}" class="u-logo-image u-logo-image-1">
+            <img src="{{ url_for('static', filename='basic/images/BUITEMS_logo.png') }}"
+                 class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-align-left u-menu u-menu-dropdown u-nav-spacing-25 u-offcanvas u-menu-1">
             <div class="menu-collapse"
@@ -118,12 +127,19 @@
             <form action="/reservation" method="POST"
                   class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form"
                   style="padding: 10px" source="custom" name="form" redirect="true">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Reserve for Self
+                    </label>
+                </div>
                 <div class="u-form-group u-form-name">
                     <label for="name-3b9a" class="u-form-control-hidden u-label">Name</label>
                     <input type="text" placeholder="Enter your CNIC" id="name-3b9a" name="name"
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white"
                            required="required">
                 </div>
+
                 <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
                     <label for="text-0252" class="u-form-control-hidden u-label"></label>
                     <input type="text" id="text-0252" name="text"
@@ -136,14 +152,16 @@
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white">
                 </div>
                 <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-4">
-                    <label for="date-ba0f"  class="u-label">Check In Date</label>
-                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check in Date" id="date-ba0f" name="date"
+                    <label for="date-ba0f" class="u-label">Check In Date</label>
+                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check in Date" id="date-ba0f"
+                           name="date"
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white"
                            required="required">
                 </div>
                 <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-5">
                     <label for="date-65d1" class="u-label">Check Out Date</label>
-                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check out Date" id="date-65d1" name="date-1"
+                    <input type="date" required pattern="\d{4}-\d{2}-\d{2}" placeholder="Check out Date" id="date-65d1"
+                           name="date-1"
                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-15 u-white"
                            required="required">
                 </div>
@@ -175,45 +193,58 @@
         </div>
     </div>
 </section>
-<section class="u-align-center u-clearfix u-section-2" id="sec-7b39">
-    <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <h1 class="u-text u-text-default u-text-1">My Bookings</h1>
-        <div class="u-expanded-width u-table u-table-responsive u-table-1">
-            <table class="u-table-entity u-table-entity-1">
-                <colgroup>
-                    <col width="25%">
-                    <col width="25%">
-                    <col width="25%">
-                    <col width="25%">
-                </colgroup>
-                <thead class="u-palette-4-base u-table-header u-table-header-1">
-                <tr style="height: 21px;">
-                    <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Room Number</th>
-                    <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Check in</th>
-                    <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Check Out</th>
-                    <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Status</th>
-                    <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-1-dark-3">Options</th>
-                </tr>
-                </thead>
-                <tbody class="u-table-body">
-                {% for onebooking in allbookings %}
-                <tr style="height: 75px;">
-                    <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-5">{{ onebooking[0] }}
-                    </td>
-                    <td class="u-border-1 u-border-grey-30 u-table-cell">{{ onebooking[1] }}</td>
-                    <td class="u-border-1 u-border-grey-30 u-table-cell">{{ onebooking[2] }}</td>
-                    <td class="u-border-1 u-border-grey-30 u-table-cell">UnSpecified</td>
-                    <td class="u-border-1 u-border-grey-30 u-table-cell u-table-cell-12"> <a href="https://nicepage.com/c/testimonials-html-templates" class="u-btn u-button-style u-btn-2">Cancel</a></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
 
-            <br>
-            <br>
-            <br>
+
+<section class="u-align-center u-clearfix u-section-2" id="sec-7b39">
+    <form action="{{ url_for('addRegion') }}" method="post">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+            <h1 class="u-text u-text-default u-text-1">My Bookings</h1>
+            <div class="u-expanded-width u-table u-table-responsive u-table-1">
+                <table class="u-table-entity u-table-entity-1">
+                    <colgroup>
+                        <col width="25%">
+                        <col width="25%">
+                        <col width="25%">
+                        <col width="25%">
+                    </colgroup>
+                    <thead class="u-palette-4-base u-table-header u-table-header-1">
+                    <tr style="height: 21px;">
+                        <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Room
+                            Number
+                        </th>
+                        <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Check in
+                        </th>
+                        <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Check Out
+                        </th>
+                        <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-2-dark-3">Status</th>
+                        <th class="u-border-1 u-border-palette-4-base u-table-cell u-text-palette-1-dark-3">Options</th>
+                    </tr>
+                    </thead>
+                    <tbody class="u-table-body">
+                    {% for onebooking in allbookings %}
+                    <tr style="height: 75px;">
+                        <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-5">{{
+                            onebooking[0] }}
+                        </td>
+                        <td class="u-border-1 u-border-grey-30 u-table-cell">{{ onebooking[1] }}</td>
+                        <td class="u-border-1 u-border-grey-30 u-table-cell">{{ onebooking[2] }}</td>
+                        <td class="u-border-1 u-border-grey-30 u-table-cell">{{ onebooking[4] }}</td>
+                        <td class="u-border-1 u-border-grey-30 u-table-cell u-table-cell-12">
+                            <!--                            <a href="#" class="u-btn u-btn-round u-btn-submit u-button-style u-radius-15">-->
+                            <!--                                Cancel - {{ onebooking[3] }}</a>-->
+                            <!--                            <input type="submit" value="{{ onebooking[3] }}" class="u-form-control-hidden"></td>-->
+                            <input name="{{onebooking[3]}}" type="submit" value="Cancel" class="btn btn-primary">
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+                <br>
+                <br>
+            </div>
         </div>
-    </div>
+    </form>
 </section>
 
 
@@ -338,6 +369,9 @@ function getRooms(){
 
         }
     }
+
+
+
 
 
 

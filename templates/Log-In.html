@@ -63,9 +63,24 @@
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-form u-form-1">
           <form action="/" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
+           <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-4">
+                    <label for="SelectId" class="u-form-control-hidden u-label u-label-4"></label>
+                    <div class="u-form-select-wrapper">
+                        <select id="SelectId" name="selectid"
+                                class="u-border-2 u-border-grey-30 u-border-no-left u-border-no-right u-border-no-top u-input u-input-rectangle u-white u-input-4"
+                                required="required">
+                            <option value="" selected="true" disabled="disabled">Select Identification Type</option>
+                            <option value="CNIC">CNIC</option>
+                            <option value="Passport Number">Passport Number</option>
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" class="u-caret">
+                            <path fill="currentColor" d="M4 8L0 4h8z"></path>
+                        </svg>
+                    </div>
+                </div>
             <div class="u-form-group u-form-name">
-              <label for="name-5cb1" class="u-label u-label-1">CNIC</label>
-              <input type="text" placeholder="Enter your CNIC" id="name-5cb1" name="CNIC" class="u-border-3 u-border-grey-30 u-grey-10 u-input u-input-rectangle u-radius-28 u-input-1">
+              <label for="name-5cb1" class="u-label u-label-1">CNIC / Passport Number</label>
+              <input onclick="check()" type="number" placeholder="Enter your CNIC" id="name-5cb1" name="CNIC" class="u-border-3 u-border-grey-30 u-grey-10 u-input u-input-rectangle u-radius-28 u-input-1">
             </div>
             <div class="u-form-group">
               <label for="email-5cb1" class="u-label u-label-2">Password</label>
@@ -101,4 +116,57 @@
       </a>. 
     </section>
   </body>
+
+<script>
+
+
+
+    function check() {
+     var card = document.getElementById("SelectId").value;
+
+var inputBox = document.getElementById("name-5cb1");
+
+var invalidChars = [
+  "-",
+  "+",
+  "e",
+];
+
+inputBox.addEventListener("keydown", function(e) {
+  if (invalidChars.includes(e.key)) {
+    e.preventDefault();
+  }
+});
+
+if (card == '')
+{
+    alert ("Please Select Appropriate Identification Type First !");
+
+    }
+if (card == 'CNIC')
+{
+    document.getElementById("name-5cb1").type = 'number';
+     document.getElementById("name-5cb1").setAttribute("maxlength", 15);
+     document.getElementById("name-5cb1").setAttribute("oninput", "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);");
+
+}
+else {
+    document.getElementById("name-5cb1").type = 'text';
+    document.getElementById("name-5cb1").setAttribute("maxlength", 15);
+
+
+    document.getElementById("name-5cb1").size = '15';
+    document.getElementById("name-5cb1").setAttribute("oninput", "this.value = this.value.toUpperCase()");
+
+}
+
+
+
+
+
+}
+
+</script>
+
+
 </html>

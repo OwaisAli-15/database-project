@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+
 import socketio
 from flask import Flask, render_template, request, redirect, url_for, session,flash
 import os
@@ -20,6 +21,8 @@ from sqlalchemy.pool import StaticPool
 
 
 
+
+
 app = Flask(__name__)
 app.debug=True
 TEMPLATES_AUTO_RELOAD = True
@@ -29,7 +32,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 socketio = SocketIO(app, manage_session=False)
-
+app.config['SECURITY_RECOVERABLE'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sample_database6.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -109,7 +112,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if session.get("user_id") is None:
             print("redirect required")
-            return redirect("/login")
+            return redirect("/")
         else:
             print("NO logIn")
         return f(*args, **kwargs)
@@ -125,27 +128,9 @@ def login_required(f):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route('/', methods=["GET", "POST"])
 def login():
      #clear any session
-     session.clear()
 
      if request.method  == "GET":
         return render_template("Log-In.html")
@@ -160,20 +145,20 @@ def login():
         bd.commit()
         print(checkuser)
 
-        for a in bd.execute("select identification, password from newguests;").fetchall():
-            print(a)
-
         if (checkuser is None):
             return redirect(url_for('register'))
-
+        session["user_id"] = Cnic
         return  redirect(url_for('reservation'))
 
 
+@login_required
 @app.route('/reservation', methods=["GET", "POST"])
 def reservation():
     if request.method == "GET":
-
-        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout from roomres join room on roomres.roomid = room.roomid join reservation on reservation.reservationid = roomres.reservationid").fetchall()
+        if session.get("user_id") is None:
+            return redirect(url_for('register'))
+        print("Session: ", session)
+        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout, reservation.reservationid, reservation.status from roomres join room on roomres.roomid = room.roomid join reservation on reservation.reservationid = roomres.reservationid where identification = ? or resforid = ? order by status", ([session["user_id"] , session["user_id"]])).fetchall()
 
         for a in allbookings:
             print(a)
@@ -208,7 +193,7 @@ def reservation():
 
         print("CHECK IN:", checkindateSet, "\nCHECK OUT: ", checkoutdateSet)
 
-        bd.execute("insert into reservation (purposeofvisit, reference, identification) values (?, ?, ?);", ([pov, reference, cnic]))
+        bd.execute("insert into reservation (purposeofvisit, reference, identification, status, resforid) values (?, ?, ?, ?,?);", ([pov, reference, session["user_id"], "Active", cnic]))
         bd.commit()
 
         id = bd.execute("SELECT * FROM reservation order by reservationid desc LIMIT 1;").fetchone()
@@ -219,6 +204,12 @@ def reservation():
         bd.execute("insert into roomres (roomid, checkin, checkout, reservationid) values (?, ?, ?, ?) ", ([room[0], checkin, checkout, int(id[0])]))
         bd.commit()
 
+
+        all = bd.execute("Select * from reservation").fetchall()
+
+        print("All res")
+        for a in all:
+            print(a)
 
         return redirect(url_for('reservation'))
 
@@ -275,6 +266,8 @@ def register():
 
 @app.route('/roomtype', methods=["GET", "POST"])
 def roomtype():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == "GET":
 
         allroomtypes = bd.execute("Select * from RoomType").fetchall()
@@ -323,6 +316,8 @@ def roomtype():
 
 @app.route('/room', methods=["GET", "POST"])
 def Room():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == "GET":
 
         allroomtypes = bd.execute("select typename, roomtypeid from roomtype;").fetchall()
@@ -360,6 +355,8 @@ def Room():
 
 @app.route('/servicehistory', methods=["GET", "POST"])
 def servicehistory():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == 'GET':
 
         allres = bd.execute(
@@ -394,6 +391,8 @@ def servicehistory():
 
 @app.route('/externalservice', methods=["GET", "POST"])
 def externalservice():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == 'GET':
 
         allres = bd.execute(
@@ -422,6 +421,8 @@ def externalservice():
 
 @app.route('/bill', methods=["GET", "POST"])
 def bill():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == 'GET':
 
         allres = bd.execute(
@@ -464,6 +465,8 @@ def bill():
 
 @app.route('/servicecharges', methods=["GET", "POST"])
 def servicecharges():
+    if session.get("user_id") is None:
+        return redirect(url_for('register'))
     if request.method == 'GET':
 
         allservices = bd.execute(
@@ -487,6 +490,43 @@ def servicecharges():
 
         return redirect(url_for('servicecharges'))
 
+
+
+
+
+@app.route('/pendings', methods=["GET", "POST"])
+def pendings():
+
+    if request.method == "POST":
+
+        print(zip(request.form.get("result")))
+
+        for a in request.form.getlist("result") :
+            print(a)
+
+        print(request.form)
+
+        print("Json : ", request.get_json())
+
+        return redirect('/pendings')
+
+    else:
+        onebooking = {'userID': '1', 'CNIC': '1236', }
+
+        secondbooking = {'userID': '2', 'UserId': '12336'}
+
+
+        prof = []
+
+    pendingUsers = bd.execute("Select guestID, identification, guestname, org, usertype from newguests").fetchall()
+    bd.commit()
+    for a in pendingUsers:
+        # print(a)
+        prof.append({"userID" : a[0], "name" : a[2], "CNIC" : a[1]})
+
+
+
+    return render_template("pendings.html", all_pendings = pendingUsers, CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
 
 
@@ -667,12 +707,17 @@ def execute():
     # for a in bd.execute("Select room.roomid, roomres.checkin, roomres.checkout,  room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room join roomtype on roomtype.roomtypeid = room.roomtypeid left join roomres on room.roomid = roomres.roomid where roomres.checkin <= ? and ? <= roomres.checkout", (["10-10-2021", "10-10-2021"])).fetchall():
     #     print("Worko: ", a)
 
-    a = bd.execute("Delete from reservation;").fetchall()
-    a = bd.execute("Delete from  roomres;").fetchall()
-    a = bd.execute("Delete from  servicehistory;").fetchall()
+    # a = bd.execute("Delete from reservation;").fetchall()
+    #
+    # a = bd.execute("Delete from  roomres;").fetchall()
+    # a = bd.execute("Delete from  servicehistory;").fetchall()
+    # bd.commit()
 
-    for b in a:
-        print(a)
+    bd.execute("Alter table newguests add usertype Text")
+    bd.commit()
+
+    # for b in a:
+    #     print(a)
 
     bd.commit()
 
@@ -709,7 +754,60 @@ def shutdown_server():
 @app.route('/shutdown', methods=['GET'])
 def shutdown():
     shutdown_server()
+    return 'Server shutting down...'\
+
+@app.route('/addRegion', methods=['POST'])
+def addRegion():
+    a = ""
+    for key in request.form.keys():
+        a += key
+
+    bd.execute("Update reservation set status = 'Canceled' Where reservationid = ? ", ([key]))
+    bd.commit()
+    return redirect(url_for('reservation'))
+
+
+@app.route('/updatesuer', methods=['POST'])
+def updateuser():
+
+    b = ""
+    for a in request.form.values():
+        b += a
+    if b == "setAdmin" or b == "setUser":
+        print("AYOOOO: ", b)
+        a = ""
+        for key in request.form.keys():
+            a += key
+
+    op = ""
+    for key in request.form.values():
+        print("KEY: ", key)
+        op += key
+    print(request.form.items())
+    a = ""
+    for key in request.form.keys():
+        a += key
+
+    bd.execute("Update newguests set usertype = ? Where guestid = ? ", ([op, key]))
+    bd.commit()
+    return redirect(url_for('pendings'))
+
+
+
+@app.route('/cancelreservation', methods=['POST'])
+def cancelres():
+    print("WORKING ")
+    print(request.form)
     return 'Server shutting down...'
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     socketio.run(app, host="127.0.0.1", port=5000, debug=True)
