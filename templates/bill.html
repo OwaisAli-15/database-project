@@ -67,26 +67,38 @@
             </div>
             <div class="u-custom-menu u-nav-container">
                 <ul class="u-nav u-spacing-30 u-unstyled u-nav-1">
+
+                    {% if type == "Set As Admin"%}
                     <li class="u-nav-item"><a
                             class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="Home.html" style="padding: 10px 0px;">Home</a>
-                    </li>
+                            href="/room" style="padding: 10px 0px;">Room</a>
+
+                        <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/roomtype" style="padding: 10px 0px;">roomtype</a>
+
+                    <li><a
+                            class="link-primary"
+                            href="/externalservice" style="padding: 10px 0px;">ExternalService</a>
+                    <br>
                     <li class="u-nav-item"><a
                             class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="About.html" style="padding: 10px 0px;">About</a>
-                    </li>
+                            href="/servicecharges" style="padding: 10px 0px;">servicecharges</a>
+
                     <li class="u-nav-item"><a
                             class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="Contact.html" style="padding: 10px 0px;">Contact</a>
-                    </li>
+                            href="/servicehistory" style="padding: 10px 0px;">servicehistory</a>
+
+                    {% endif %}
                     <li class="u-nav-item"><a
                             class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="Log-In.html" style="padding: 10px 0px;">Log In</a>
-                    </li>
+                            href="/bill" style="padding: 10px 0px;">Billing</a>
+
                     <li class="u-nav-item"><a
                             class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="Sign-Up.html" style="padding: 10px 0px;">Sign Up</a>
+                            href='/logout' style="padding: 10px 0px;">Log Out</a>
                     </li>
+
                 </ul>
             </div>
             <div class="u-custom-menu u-nav-container-collapse">
@@ -106,6 +118,8 @@
                         </ul>
                     </div>
                 </div>
+                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+            </div>
                 <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
         </nav>
@@ -153,7 +167,7 @@
     </div>
 </section>
 <section class="u-align-center u-clearfix u-lightbox u-section-2" id="sec-a19e">
-    <form action="{{ url_for('addRegion') }}" method="post">
+    <form action="{{ url_for('setpaid') }}" method="post">
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
             <div class="u-expanded-width u-table u-table-responsive u-table-1">
                 <table class="u-table-entity u-table-entity-1">
@@ -218,7 +232,14 @@
                         <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
                         <td class="u-border-1 u-border-grey-30 u-table-cell">Total</td>
                         <td class="u-border-1 u-border-grey-30 u-table-cell">{{total}}</td>
-                        <td class="u-border-1 u-border-grey-30 u-table-cell"><input name="{{reservation}}" type="submit" value="Paid" class="btn btn-primary"></td>
+                        {% for pay in dates %}
+                        {% if pay[5] != 'paid' %}
+                        <td class="u-border-1 u-border-grey-30 u-table-cell"><input name="{{reservation}}" type="submit" value="Pay" class="btn btn-primary"></td>
+                        {% else %}
+                        <td class="u-border-1 u-border-grey-30 u-table-cell"><input disabled = 'disabled' name="{{reservation}}" type="submit" value="Already Paid" class="btn btn-primary"></td>
+
+                        {% endif %}
+                        {% endfor %}
                     </tr>
 
                     </tbody>

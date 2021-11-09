@@ -38,22 +38,61 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-spacing-30 u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90" href="Home.html" style="padding: 10px 0px;">Home</a>
-</li><li class="u-nav-item"><a class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90" href="About.html" style="padding: 10px 0px;">About</a>
-</li><li class="u-nav-item"><a class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90" href="Contact.html" style="padding: 10px 0px;">Contact</a>
-</li><li class="u-nav-item"><a class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90" href="Log-In.html" style="padding: 10px 0px;">Log In</a>
-</li><li class="u-nav-item"><a class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90" href="Sign-Up.html" style="padding: 10px 0px;">Sign Up</a>
-</li></ul>
-          </div>
-          <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-              <div class="u-inner-container-layout u-sidenav-overflow">
-                <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Home.html" style="padding: 10px 20px;">Home</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="About.html" style="padding: 10px 20px;">About</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Contact.html" style="padding: 10px 20px;">Contact</a>
-</li></ul>
-              </div>
+
+          <div class="u-custom-menu u-nav-container">
+                <ul class="u-nav u-spacing-30 u-unstyled u-nav-1">
+
+                    {% if type == "Set As Admin"%}
+                    <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/room" style="padding: 10px 0px;">Room</a>
+
+                        <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/roomtype" style="padding: 10px 0px;">roomtype</a>
+
+                    <li><a
+                            class="link-primary"
+                            href="/externalservice" style="padding: 10px 0px;">ExternalService</a>
+                    <br>
+                    <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/servicecharges" style="padding: 10px 0px;">servicecharges</a>
+
+                    <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/servicehistory" style="padding: 10px 0px;">servicehistory</a>
+
+                    {% endif %}
+                    <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href="/bill" style="padding: 10px 0px;">Billing</a>
+
+                    <li class="u-nav-item"><a
+                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
+                            href='/logout' style="padding: 10px 0px;">Log Out</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="u-custom-menu u-nav-container-collapse">
+                <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+                    <div class="u-inner-container-layout u-sidenav-overflow">
+                        <div class="u-menu-close"></div>
+                        <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
+                            <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Home.html"
+                                                      style="padding: 10px 20px;">Home</a>
+                            </li>
+                            <li class="u-nav-item"><a class="u-button-style u-nav-link" href="About.html"
+                                                      style="padding: 10px 20px;">About</a>
+                            </li>
+                            <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Contact.html"
+                                                      style="padding: 10px 20px;">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
             <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
           </div>

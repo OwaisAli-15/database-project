@@ -144,7 +144,7 @@ def Details():
         return render_template("GuestRoomDetails.html")
      else:
 
-        return  redirect(url_for('reservation'))\
+        return  redirect(url_for('reservation'))
 
 @app.route('/logout', methods=["GET"])
 def logout():
@@ -177,6 +177,7 @@ def login():
         if (checkuser is None):
             return redirect(url_for('register'))
         session["user_id"] = Cnic
+        session["usertype"] = checkuser[13]
         return  redirect(url_for('reservation'))
 
 
@@ -215,7 +216,9 @@ def reservation():
             allbookings2.append(a)
         print("ALL: ", allbookings2)
 
-        return render_template("reservation.html", allbookings=allbookings2, id=session["user_id"])
+
+
+        return render_template("reservation.html", allbookings=allbookings2, id=session["user_id"], type=session["usertype"])
     else:
 
         cnic = request.form.get('name')
@@ -305,8 +308,9 @@ def register():
 
 @app.route('/roomtype', methods=["GET", "POST"])
 def roomtype():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
+
     if request.method == "GET":
 
         allroomtypes = bd.execute("Select * from RoomType").fetchall()
@@ -316,9 +320,9 @@ def roomtype():
                 print(a)
 
             print(type(allroomtypes))
-            return render_template("roomtype.html", allroomtypes=allroomtypes)
+            return render_template("roomtype.html", allroomtypes=allroomtypes,type=session["usertype"])
         else:
-            return render_template("roomtype.html")
+            return render_template("roomtype.html", type=session["usertype"])
     else:
 
         typename = request.form.get("roomtypename")
@@ -355,8 +359,8 @@ def roomtype():
 
 @app.route('/room', methods=["GET", "POST"])
 def Room():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
     if request.method == "GET":
 
         allroomtypes = bd.execute("select typename, roomtypeid from roomtype;").fetchall()
@@ -371,10 +375,10 @@ def Room():
         if (allrooms is not None):
             for a in allrooms:
                 print("ATYO:", a)
-            return render_template("room.html", allroomtypes=allroomtypes, allrooms=allrooms)
+            return render_template("room.html", allroomtypes=allroomtypes, allrooms=allrooms, type=session["usertype"])
         else:
             print("Nothing")
-            return render_template("room.html")
+            return render_template("room.html", type=session["usertype"])
 
     else:
         roomName = request.form.get('roomname')
@@ -398,8 +402,8 @@ def Room():
 
 @app.route('/servicehistory', methods=["GET", "POST"])
 def servicehistory():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
     if request.method == 'GET':
 
         allres = bd.execute(
@@ -412,7 +416,7 @@ def servicehistory():
             "select serviceid, servicename, servicecharges from services"
         ).fetchall()
 
-        return render_template("service-history.html", allres=allres, allser=allser)
+        return render_template("service-history.html", allres=allres, allser=allser, type=session["usertype"])
 
     else:
         reservation = request.form.get('select-1')
@@ -434,15 +438,15 @@ def servicehistory():
 
 @app.route('/externalservice', methods=["GET", "POST"])
 def externalservice():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
     if request.method == 'GET':
 
         allres = bd.execute(
             "select reservationid, roomname from reservation join roomres using (reservationid) join room using (roomid) where checkin <= DATE('now') and checkout >= DATE('now')"
         ).fetchall()
 
-        return render_template("externalservice.html", allres=allres)
+        return render_template("externalservice.html", allres=allres, type=session["usertype"])
 
     else:
         reservation = request.form.get('select-1')
@@ -464,8 +468,8 @@ def externalservice():
 
 @app.route('/bill', methods=["GET", "POST"])
 def bill():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
     if request.method == 'GET':
 
         allres = bd.execute(
@@ -474,7 +478,7 @@ def bill():
         bd.commit()
         print("Allres: ", allres)
 
-        return render_template("bill.html", allres=allres)
+        return render_template("bill.html", allres=allres, type=session["usertype"])
 
     else:
         reservation = request.form.get('select')
@@ -486,10 +490,13 @@ def bill():
         bd.commit()
 
         dates = bd.execute(
-                "SELECT roomname, typename, standardprice, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) as noofdays, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) * standardprice  FROM 'roomres' join 'room' using (roomid) join 'roomtype' using (roomtypeid) where roomres.reservationid = ?",
+                "SELECT roomname, typename, standardprice, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) as noofdays, ROUND((JULIANDAY(checkout) - JULIANDAY(checkin))) * standardprice, reservation.paid  FROM 'roomres' join 'room' using (roomid) join 'roomtype' using (roomtypeid) join reservation using (reservationid) where roomres.reservationid = ?",
             ([reservation])
         ).fetchall()
         bd.commit()
+
+        print(dates)
+
 
         total = 0
         num = 0
@@ -535,15 +542,15 @@ def bill():
 
 @app.route('/servicecharges', methods=["GET", "POST"])
 def servicecharges():
-    if session.get("user_id") is None:
-        return redirect(url_for('register'))
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
     if request.method == 'GET':
 
         allservices = bd.execute(
             "select * from services"
         ).fetchall()
         print(allservices)
-        return render_template("ServiceCharges.html", allservices=allservices)
+        return render_template("ServiceCharges.html", allservices=allservices, type=session["usertype"])
     else:
         servicename = request.form.get('servicename')
         servicecharges = request.form.get('servicecharges')
@@ -566,6 +573,8 @@ def servicecharges():
 
 @app.route('/pendings', methods=["GET", "POST"])
 def pendings():
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
 
     if request.method == "POST":
 
@@ -596,173 +605,14 @@ def pendings():
 
 
 
-    return render_template("pendings.html", all_pendings = pendingUsers, CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    return render_template("pendings.html", all_pendings = pendingUsers, type=session["usertype"], CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
 
-
-
-'''
-@app.route('/room', methods=["GET", "POST"])
-def Room():
-    if request.method == "GET":
-
-        allroomtypes = bd.execute("select typename, roomtypeid from roomtype;").fetchall()
-        bd.commit()
-
-        for a in allroomtypes:
-            print("Type: ", a)
-
-
-        allrooms = bd.execute("Select room.roomid, room.roomname, room.desc, room.roomstatus, room.roomtypeid, roomtype.typename from room, roomtype where roomtype.roomtypeid = room.roomtypeid").fetchall()
-        bd.commit()
-        if (allrooms is not None):
-            for a in allrooms:
-                print("ATYO:", a)
-            return render_template("room.html", allroomtypes=allroomtypes, allrooms=allrooms)
-        else:
-            print("Nothing")
-            return render_template("room.html")
-
-    else:
-        roomName = request.form.get('roomname')
-        status = request.form.get('status')
-        type = request.form.get('roomtype')
-        desc = request.form.get('desc')
-
-        bd.execute("Insert into room (roomname, desc, roomstatus, roomtypeid) values(?, ?,?,?)", ([roomName,desc,  status, type]))
-
-        print("roomname: ", roomName)
-        print("status: ", status)
-        print("type: ", type)
-        print("desc: ", desc)
-
-        return redirect (url_for('Room'))
-
-
-
-@app.route('/pendings', methods=["GET", "POST"])
-def pendings():
-
-    if request.method == "POST":
-
-        print(zip(request.form.get("result")))
-
-        for a in request.form.getlist("result") :
-            print(a)
-
-        print(request.form)
-
-        print("Json : ", request.get_json())
-
-        return redirect('/pendings')
-
-    else:
-        onebooking = {'userID': '1', 'CNIC': '1236', }
-
-        secondbooking = {'userID': '2', 'UserId': '12336'}
-
-
-        prof = []
-
-        pendingUsers = bd.execute("Select users.userID, users.cnic, guests.guestname from users join guests on users.cnic = guests.identification where users.status != '1'")
-
-    for a in pendingUsers:
-        # print(a)
-        prof.append({"userID" : a[0], "name" : a[2], "CNIC" : a[1]})
-
-
-    return render_template("pendings.html", all_pendings = prof, CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-
-
-
-
-@app.route('/userprofile', methods=["GET", "POST"])
-def userMenu():
-    onebooking = {'GNR': '1', 'UserId' : 'A1', 'getStatus' : 'CNF', 'RoomId' : 'R1' , 'StartTime' : '28/09/2021 07:58:56',
-                  'EndTime' : '30/09/2021 07:58:56' , 'AmountReq' : 'RS.159', 'AmountPaid': 'RS.130', 'getStatus': 'WL' ,
-                  'Reason' : 'None', 'BookingTime' : '120'}
-
-    secondbooking = {'GNR': '2', 'UserId': 'A2', 'getStatus': 'WL', 'RoomId': 'R3', 'StartTime': '23/09/2021 07:58:56',
-                  'EndTime': '28/09/2021 07:58:56', 'AmountReq': 'RS.159', 'AmountPaid': 'RS.130', 'getStatus': 'CNF',
-                  'Reason': 'None', 'BookingTime': '120'}
-
-    prof = [onebooking, secondbooking]
-
-    return render_template('user/profile.html', all_bookings = prof, CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-
-@app.route('/customer', methods=["GET", "POST"])
-def customer():
-    return render_template("customer.html")
-
-
-@app.route('/profile', methods=["GET", "POST"])
-def profile():
-    if request.method == "GET":
-        return render_template("profile.html")
-
-    else:
-
-        name = request.form.get("fullName")
-        gender = request.form.get("gender")
-        identification = request.form.get("identification")
-        Nationality = request.form.get("Nationality")
-        Phone_Number = request.form.get("Phone_Number")
-        Email_Address = request.form.get("Email_Address")
-        org = request.form.get("org")
-        Address = request.form.get("Address")
-        Allergies = request.form.get("Allergies")
-        org = request.form.get("org")
-        Medical = request.form.get("Medical")
-
-        print("AYO: ", name, gender)
-
-        bd.execute("Insert into guests (GuestName, identification, idtype , phonenumber, email, org, posAdd, gender, allergies, medicalneeds) values (?,?,?,?,?,?,?,?,?,?)", ([name, identification, Nationality, Phone_Number, Email_Address, org, Address, gender, Allergies, Medical]))
-        bd.commit()
-
-        return render_template("profile.html")
-
-@app.route('/logout', methods=["GET", "POST"])
-def logout():
-    return render_template("customer.html")
-
-
-@app.route('/login2', methods=["GET", "POST"])
-def login2():
-    return render_template("login2.html")
-
-
-
-@app.route('/newmain', methods=["GET", "POST"])
-def newmain():
-    return render_template("Main Page/index.html")
-
-
-
-
-@app.route('/adminProfile', methods=["GET", "POST"])
-def adminProfile():
-    onebooking = {'GNR': '1', 'UserId': 'A1', 'getStatus': 'CNF', 'RoomId': 'R1', 'StartTime': '28/09/2021 07:58:56',
-                  'EndTime': '30/09/2021 07:58:56', 'AmountReq': 'RS.159', 'AmountPaid': 'RS.130', 'getStatus': 'WL',
-                  'Reason': 'None', 'BookingTime': '120'}
-
-    secondbooking = {'GNR': '2', 'UserId': 'A2', 'getStatus': 'WL', 'RoomId': 'R3', 'StartTime': '23/09/2021 07:58:56',
-                     'EndTime': '28/09/2021 07:58:56', 'AmountReq': 'RS.159', 'AmountPaid': 'RS.130',
-                     'getStatus': 'CNF',
-                     'Reason': 'None', 'BookingTime': '120'}
-
-    prof = [onebooking, secondbooking]
-    return render_template("admin/profile.html", all_bookings = prof, CurrentTime= datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-
-
-
-
-'''
 
 @app.route('/execute', methods=["GET", "POST"])
 def execute():
+    if session.get("user_id") is None or session.get("usertype") is None:
+        return redirect(url_for('login'))
 
     #bd.execute("CREATE TABLE newguests (guestID INTEGER PRIMARY KEY, GuestName TEXT, title text, password text,  identification integer, idtype text, phonenumber text, email text, org text, posAdd text, gender text, allergies text, medicalneeds text );")
 
@@ -783,7 +633,7 @@ def execute():
     # a = bd.execute("Delete from  servicehistory;").fetchall()
     # bd.commit()
 
-    bd.execute("Alter table newguests add usertype Text")
+    bd.execute("Alter table reservation add paid Text")
     bd.commit()
 
     # for b in a:
@@ -797,24 +647,8 @@ def execute():
 
     print("Dont!")
     return redirect('/')
-'''
-     query = bd.execute("Select guests.guestname, guests.identification from users join guests on users.cnic = guests.identification")
-     query = bd.execute("Select * from users;")
-     for a in query:
-         print(a)
 
-    bd.execute("DELETE FROM RoomType;")
 
-    bd.execute ("Create table RoomType (roomtypeid INTEGER PRIMARY KEY, typename text, description text, status text, standardprice int, discountedprice int);")
-    bd.execute("Drop table room;")
-
-    
-   a = bd.execute("select * from room").fetchall()
-
-   for b in a:
-       print(a)
-   bd.commit()
-   '''
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
@@ -835,6 +669,17 @@ def addRegion():
     bd.execute("Update reservation set status = 'Canceled' Where reservationid = ? ", ([key]))
     bd.commit()
     return redirect(url_for('reservation'))
+
+
+@app.route('/paid', methods=['POST'])
+def setpaid():
+    a = ""
+    for key in request.form.keys():
+        a += key
+
+    bd.execute("Update reservation set paid = 'paid' Where reservationid = ? ", ([key]))
+    bd.commit()
+    return redirect(url_for('bill'))
 
 
 @app.route('/updatesuer', methods=['POST'])
