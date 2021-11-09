@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
-
-
+from flask_ngrok import run_with_ngrok
 import socketio
 from flask import Flask, render_template, request, redirect, url_for, session,flash
 import os
@@ -30,6 +29,9 @@ app.secret_key = "my secret key"
 app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
+
+
+run_with_ngrok(app)
 
 socketio = SocketIO(app, manage_session=False)
 app.config['SECURITY_RECOVERABLE'] = True
@@ -808,9 +810,8 @@ def cancelres():
 
 
 
-
 if __name__ == '__main__':
-    socketio.run(app, host="127.0.0.1", port=5000, debug=True)
+    app.run()
 
 
 

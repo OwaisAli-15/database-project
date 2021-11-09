@@ -13,8 +13,8 @@
     <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/nicepage.js') }}" defer=""></script>
     <meta name="generator" content="Nicepage 3.27.0, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
-    
-    
+
+
     <script type="application/ld+json">{
 		"@context": "http://schema.org",
 		"@type": "Organization",
@@ -80,13 +80,18 @@
                 </div>
             <div class="u-form-group u-form-name">
               <label for="name-5cb1" class="u-label u-label-1">CNIC / Passport Number</label>
-              <input onclick="check()" type="number" placeholder="Enter your CNIC" id="name-5cb1" name="CNIC" class="u-border-3 u-border-grey-30 u-grey-10 u-input u-input-rectangle u-radius-28 u-input-1">
+              <input pattern=".{8,}" oninput="setCustomValidity('')" onclick="check()" type="number" placeholder="Enter your CNIC" id="name-5cb1" name="CNIC" class="u-border-3 u-border-grey-30 u-grey-10 u-input u-input-rectangle u-radius-28 u-input-1">
             </div>
             <div class="u-form-group">
               <label for="email-5cb1" class="u-label u-label-2">Password</label>
               <input type="password" placeholder="Password" id="email-5cb1" name="Password" class="u-border-3 u-border-grey-30 u-grey-10 u-input u-input-rectangle u-radius-28 u-input-2" required="required">
             </div>
             <div class="u-align-center u-form-group u-form-submit">
+
+
+
+                
+
               <a href="#" class="u-btn u-btn-submit u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-1">Submit</a>
               <input type="submit" value="submit" class="u-form-control-hidden">
             </div>
@@ -99,8 +104,8 @@
         <a href="{{ url_for('register') }}" class="u-active-none u-border-2 u-border-palette-1-base u-btn u-btn-rectangle u-button-style u-hover-none u-none u-radius-0 u-btn-3">Not a member yet? Sign Up Now</a>
       </div>
     </section>
-    
-    
+
+
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-b76c"><div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the text box. Click again or double click to start editing the text.</p>
       </div></footer>
@@ -113,7 +118,7 @@
       </p>
       <a class="u-link" href="https://nicepage.com/html-website-builder" target="_blank">
         <span>HTML Website Builder</span>
-      </a>. 
+      </a>.
     </section>
   </body>
 
@@ -146,13 +151,17 @@ if (card == '')
 if (card == 'CNIC')
 {
     document.getElementById("name-5cb1").type = 'number';
-     document.getElementById("name-5cb1").setAttribute("maxlength", 15);
+     document.getElementById("name-5cb1").setAttribute("min", "1000000000000");
+     document.getElementById("name-5cb1").setAttribute("maxlength", 13);
+    document.getElementById("name-5cb1").setAttribute("oninvalid", "this.setCustomValidity('Invalid Number Of Digits for Identification')");
+    document.getElementById("name-5cb1").setAttribute("onchange", "this.setCustomValidity('')");
      document.getElementById("name-5cb1").setAttribute("oninput", "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);");
 
 }
 else {
     document.getElementById("name-5cb1").type = 'text';
     document.getElementById("name-5cb1").setAttribute("maxlength", 15);
+    document.getElementById("name-5cb1").setAttribute("oninvalid", "15");
 
 
     document.getElementById("name-5cb1").size = '15';
@@ -167,6 +176,7 @@ else {
 }
 
 </script>
+
 
 
 </html>

@@ -141,15 +141,24 @@
                 </div>
                 <div class="u-form-group">
                     <label for="email-0b86" class="u-form-control-hidden u-label u-label-2"></label>
-                    <input onclick="check()" placeholder="Enter your CNIC/Passport" id="email-0b86" name="identification"
+                    <input pattern=".{8,}" onclick="check()" placeholder="Enter your CNIC/Passport" id="email-0b86" name="identification"
                            class="u-border-2 u-border-grey-30 u-border-no-left u-border-no-right u-border-no-top u-input u-input-rectangle u-white u-input-2"
-                           required="required" maxlength="5">
+                           required="required">
                 </div>
                 <div class="u-form-group u-form-group-3">
                     <label for="text-1522" class="u-form-control-hidden u-label u-label-3"></label>
-                    <input type="password" placeholder="Enter a Strong Password" id="text-1522" name="password"
+                    <input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" type="password" placeholder="Enter a Strong Password" id="text-1522" name="password"
                            class="u-border-2 u-border-grey-30 u-border-no-left u-border-no-right u-border-no-top u-input u-input-rectangle u-white u-input-3">
                 </div>
+
+                 <div id="message" margin="20%  ">
+                  <h3>Password must contain the following:</h3>
+                  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                  <p id="number" class="invalid">A <b>number</b></p>
+                  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                </div>
+
 
                 <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-4">
                     <label for="select-3072" class="u-form-control-hidden u-label u-label-4"></label>
@@ -250,24 +259,159 @@ if (card == '')
     }
 if (card == 'CNIC')
 {
-    document.getElementById("email-0b86").type = 'number';
-     document.getElementById("email-0b86").setAttribute("maxlength", 15);
+     document.getElementById("email-0b86").type = 'number';
+     document.getElementById("email-0b86").setAttribute("min", "1000000000000");
+     document.getElementById("email-0b86").setAttribute("maxlength", 13);
+    document.getElementById("email-0b86").setAttribute("oninvalid", "this.setCustomValidity('Invalid Number Of Digits for Identification')");
+    document.getElementById("email-0b86").setAttribute("onchange", "this.setCustomValidity('')");
      document.getElementById("email-0b86").setAttribute("oninput", "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);");
 
 }
 else {
     document.getElementById("email-0b86").type = 'text';
     document.getElementById("email-0b86").setAttribute("maxlength", 15);
+    document.getElementById("email-0b86").setAttribute("minlength", 10);
 
 
-    document.getElementById("email-0b86").size = '15';
+
     document.getElementById("email-0b86").setAttribute("oninput", "this.value = this.value.toUpperCase()");
 
 }
 
 }
 
-
 </script>
+
+<script>
+var myInput = document.getElementById("text-1522");
+var letter = document.getElementById("letter");
+var capital = document.getElementById("capital");
+var number = document.getElementById("number");
+var length = document.getElementById("length");
+
+// When the user clicks on the password field, show the message box
+myInput.onfocus = function() {
+  document.getElementById("message").style.display = "block";
+}
+
+// When the user clicks outside of the password field, hide the message box
+myInput.onblur = function() {
+  document.getElementById("message").style.display = "none";
+}
+
+// When the user starts to type something inside the password field
+myInput.onkeyup = function() {
+  // Validate lowercase letters
+  var lowerCaseLetters = /[a-z]/g;
+  if(myInput.value.match(lowerCaseLetters)) {
+    letter.classList.remove("invalid");
+    letter.classList.add("valid");
+  } else {
+    letter.classList.remove("valid");
+    letter.classList.add("invalid");
+}
+
+  // Validate capital letters
+  var upperCaseLetters = /[A-Z]/g;
+  if(myInput.value.match(upperCaseLetters)) {
+    capital.classList.remove("invalid");
+    capital.classList.add("valid");
+  } else {
+    capital.classList.remove("valid");
+    capital.classList.add("invalid");
+  }
+
+  // Validate numbers
+  var numbers = /[0-9]/g;
+  if(myInput.value.match(numbers)) {
+    number.classList.remove("invalid");
+    number.classList.add("valid");
+  } else {
+    number.classList.remove("valid");
+    number.classList.add("invalid");
+  }
+
+  // Validate length
+  if(myInput.value.length >= 8) {
+    length.classList.remove("invalid");
+    length.classList.add("valid");
+  } else {
+    length.classList.remove("valid");
+    length.classList.add("invalid");
+  }
+}
+</script>
+
+
+<style>
+    /* Style all input fields */
+
+
+/* Style the submit button */
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Style the container for inputs */
+.container {
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+  display:none;
+  background: #f1f1f1;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 10px 35px;
+  font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+
+}
+</style>
+ </script>
+        <script>
+            function test(id, event) {
+                var element = $("#" + id);
+                var len = element.val().length + 1;
+                var max = element.attr("maxlength");
+
+                var cond = (46 < event.which && event.which < 58) || (46 < event.keyCode && event.keyCode < 58);
+
+                if (!(cond && len <= max)) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        </script>
+
+
 
 </html>
