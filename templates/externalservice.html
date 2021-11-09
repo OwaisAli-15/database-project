@@ -1,79 +1,107 @@
 <!DOCTYPE html>
 <html style="font-size: 16px;">
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Service Charges">
+    <meta name="keywords" content="Book Room, My Bookings">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>External Service</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/nicepage.css') }}" media="screen">
-<link rel="stylesheet" href="{{ url_for('static', filename='basic/css/Log-In.css') }}" media="screen">
-    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/jquery.js') }}" defer=""></script>
-    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/nicepage.js') }}" defer=""></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/Log-In.css') }}" media="screen">
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/jquery.js') }}"
+            defer=""></script>
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/nicepage.js') }}"
+            defer=""></script>
     <meta name="generator" content="Nicepage 3.27.0, nicepage.com">
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
-    
-    
+    <link id="u-theme-google-font" rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+
+
     <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": "",
-		"logo": "images/BUITEMS_logo.png"
-}</script>
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "",
+        "logo": "images/BUITEMS_logo.png"
+    }</script>
     <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="Log In">
+    <meta property="og:title" content="reservation">
     <meta property="og:type" content="website">
-  </head>
-  <body class="u-body"><header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-gradient u-header u-header" id="sec-9c83"><div class="u-clearfix u-sheet u-sheet-1">
+</head>
+<body class="u-body">
+<header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-gradient u-header u-header" id="sec-9c83">
+    <div class="u-clearfix u-sheet u-sheet-1">
         <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="315" data-image-height="309">
-          <img src="images/BUITEMS_logo.png" class="u-logo-image u-logo-image-1">
+            <img src="{{ url_for('static', filename='basic/images/BUITEMS_logo.png') }}"
+                 class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-align-left u-menu u-menu-dropdown u-nav-spacing-25 u-offcanvas u-menu-1">
-          <div class="menu-collapse" style="font-size: 1.5rem; letter-spacing: 0px; font-weight: 700; text-transform: uppercase;">
-            <a class="u-button-style u-custom-active-border-color u-custom-border u-custom-border-color u-custom-border-radius u-custom-borders u-custom-hover-border-color u-custom-padding-bottom u-custom-text-active-color u-custom-text-color u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link" href="#" style="padding: 1px 0px; font-size: calc(1em + 2px);">
-              <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 302 302" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-7b92"></use></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-7b92" x="0px" y="0px" viewBox="0 0 302 302" style="enable-background:new 0 0 302 302;" xml:space="preserve" class="u-svg-content"><g><rect y="36" width="302" height="30"></rect><rect y="236" width="302" height="30"></rect><rect y="136" width="302" height="30"></rect>
-</g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
-            </a>
-          </div>
-          <div class="u-custom-menu u-nav-container">
+            <div class="menu-collapse"
+                 style="font-size: 1.5rem; letter-spacing: 0px; font-weight: 700; text-transform: uppercase;">
+                <a class="u-button-style u-custom-active-border-color u-custom-border u-custom-border-color u-custom-border-radius u-custom-borders u-custom-hover-border-color u-custom-padding-bottom u-custom-text-active-color u-custom-text-color u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link"
+                   href="#" style="padding: 1px 0px; font-size: calc(1em + 2px);">
+                    <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 302 302" style="">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-7b92"></use>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                         id="svg-7b92" x="0px" y="0px" viewBox="0 0 302 302" style="enable-background:new 0 0 302 302;"
+                         xml:space="preserve" class="u-svg-content"><g><rect y="36" width="302" height="30"></rect><rect
+                            y="236" width="302" height="30"></rect><rect y="136" width="302" height="30"></rect>
+</g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g>
+                        <g></g></svg>
+                </a>
+            </div>
 
-          <div class="u-custom-menu u-nav-container">
-                <ul class="u-nav u-spacing-30 u-unstyled u-nav-1">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Buitems Guest House</a>
+                    </div>
+                    <ul class="nav navbar-nav">
 
-                    {% if type == "Set As Admin"%}
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/room" style="padding: 10px 0px;">Room</a>
+                        <li><a href="/reservation">Reservation</a></li>
+                        {% if type == "Set As Admin"%}
+                        <li><a href="/room">Room</a></li>
+                        <li><a href="/roomtype">Room Type</a></li>
+                        <li  {% endif%}><a href="/externalservice">External Service</a></li>
+                        <br>
+                        <li><a href="/servicecharges">Service Charges</a></li>
+                        <li><a href="/servicehistory">Service History</a></li>
+                        <li><a href="/pendings">Pending</a></li>
+                        <li><a href="/bill">Billing</a></li>
+                        {% endif%}
+                        <li><a href="/logout">Logout</a></li>
 
-                        <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/roomtype" style="padding: 10px 0px;">roomtype</a>
+                    </ul>
+                </div>
+            </nav>
 
-                    <li><a
-                            class="link-primary"
-                            href="/externalservice" style="padding: 10px 0px;">ExternalService</a>
-                    <br>
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/servicecharges" style="padding: 10px 0px;">servicecharges</a>
 
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/servicehistory" style="padding: 10px 0px;">servicehistory</a>
+            <div>
 
-                    {% endif %}
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/bill" style="padding: 10px 0px;">Billing</a>
-
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href='/logout' style="padding: 10px 0px;">Log Out</a>
-                    </li>
-
-                </ul>
+                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
             <div class="u-custom-menu u-nav-container-collapse">
                 <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
@@ -94,87 +122,106 @@
                 </div>
                 <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
-            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-          </div>
         </nav>
-      </div></header>
-    <section class="u-clearfix u-section-1" id="sec-e364">
-      <div class="u-clearfix u-sheet u-sheet-1">
+    </div>
+</header>
+<section class="u-clearfix u-section-1" id="sec-e364">
+    <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-text u-text-default u-text-1">External Services<br>
         </h1>
         <div class="u-form u-form-1">
-          <form action="/externalservice" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
-            <div class="u-form-group u-form-select u-form-group-1">
-              <label for="select-ffac" class="u-form-control-hidden u-label"></label>
-              <div class="u-form-select-wrapper">
-                <select id="select-ffac" name="select-1" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
-                  <option value="Select Active Reservations">Select Active Reservations</option>
-                 {% for oneres in allres %}
+            <form action="/externalservice" method="POST"
+                  class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form"
+                  source="custom" name="form" style="padding: 10px;" redirect="true">
+                <div class="u-form-group u-form-select u-form-group-1">
+                    <label for="select-ffac" class="u-form-control-hidden u-label"></label>
+                    <div class="u-form-select-wrapper">
+                        <select id="select-ffac" name="select-1"
+                                class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
+                            <option value="Select Active Reservations">Select Active Reservations</option>
+                            {% for oneres in allres %}
 
-                  <option value="{{oneres[0]}}">{{oneres[1]}}</option>
+                            <option value="{{oneres[0]}}">{{oneres[1]}}</option>
 
-                  {% endfor %}
-                </select>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
-              </div>
-            </div>
-            <div class="u-form-group u-form-name">
-              <label for="name-1fdf" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="External Service Name" id="name-1fdf" name="servicename" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white" required="">
-            </div>
-            <div class="u-form-group u-form-partition-factor-2">
-              <label for="email-1fdf" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="External Service Rate" id="email-1fdf" name="servicecharges" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white" required="required">
-            </div>
-            <div class="u-form-group u-form-partition-factor-2 u-form-group-4">
-              <label for="text-7791" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="External Service Quantity" id="text-7791" name="text" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
-            </div>
-            <div class="u-form-group u-form-group-5">
-              <label for="text-b4b9" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Service Provider" id="text-b4b9" name="text-1" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
-            </div>
-            <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-6">
-              <label for="select-ea81" class="u-form-control-hidden u-label"></label>
-              <div class="u-form-select-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
-              </div>
-            </div>
-            <div class="u-form-group u-form-partition-factor-2 u-form-group-7">
-              <label for="text-c642" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Service Reciept ID" id="text-c642" name="text-2" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
-            </div>
-            <div class="u-align-center u-form-group u-form-submit">
-              <a href="#" class="u-active-none u-border-2 u-border-active-palette-2-dark-1 u-border-hover-palette-2-base u-border-palette-1-base u-btn u-btn-submit u-button-style u-hover-none u-none u-text-hover-palette-2-base u-text-palette-1-base u-btn-1">Submit</a>
-              <input type="submit" value="submit" class="u-form-control-hidden">
-            </div>
-            <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
-            <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-          </form>
+                            {% endfor %}
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret">
+                            <path fill="currentColor" d="M4 8L0 4h8z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="u-form-group u-form-name">
+                    <label for="name-1fdf" class="u-form-control-hidden u-label"></label>
+                    <input type="text" placeholder="External Service Name" id="name-1fdf" name="servicename"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white"
+                           required="">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2">
+                    <label for="email-1fdf" class="u-form-control-hidden u-label"></label>
+                    <input type="text" placeholder="External Service Rate" id="email-1fdf" name="servicecharges"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white"
+                           required="required">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-4">
+                    <label for="text-7791" class="u-form-control-hidden u-label"></label>
+                    <input type="text" placeholder="External Service Quantity" id="text-7791" name="text"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
+                </div>
+                <div class="u-form-group u-form-group-5">
+                    <label for="text-b4b9" class="u-form-control-hidden u-label"></label>
+                    <input type="text" placeholder="Service Provider" id="text-b4b9" name="text-1"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-6">
+                    <label for="select-ea81" class="u-form-control-hidden u-label"></label>
+                    <div class="u-form-select-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret">
+                            <path fill="currentColor" d="M4 8L0 4h8z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-7">
+                    <label for="text-c642" class="u-form-control-hidden u-label"></label>
+                    <input type="text" placeholder="Service Reciept ID" id="text-c642" name="text-2"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-17 u-white">
+                </div>
+                <div class="u-align-center u-form-group u-form-submit">
+                    <a href="#"
+                       class="u-active-none u-border-2 u-border-active-palette-2-dark-1 u-border-hover-palette-2-base u-border-palette-1-base u-btn u-btn-submit u-button-style u-hover-none u-none u-text-hover-palette-2-base u-text-palette-1-base u-btn-1">Submit</a>
+                    <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
+                <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent.</div>
+                <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then
+                    try again.
+                </div>
+                <input type="hidden" value="" name="recaptchaResponse">
+            </form>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
-  <br>
-  <br>
-  <br>
-  <br>
+<br>
+<br>
+<br>
+<br>
 
-    
-    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-b76c"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the text box. Click again or double click to start editing the text.</p>
-      </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <a class="u-link" href="https://nicepage.com/website-design" target="_blank">
+
+<footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-b76c">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the text box. Click again or
+            double click to start editing the text.</p>
+    </div>
+</footer>
+<section class="u-backlink u-clearfix u-grey-80">
+    <a class="u-link" href="https://nicepage.com/website-design" target="_blank">
         <span>Website Design Template</span>
-      </a>
-      <p class="u-text">
+    </a>
+    <p class="u-text">
         <span>created with</span>
-      </p>
-      <a class="u-link" href="https://nicepage.com/html-website-builder" target="_blank">
+    </p>
+    <a class="u-link" href="https://nicepage.com/html-website-builder" target="_blank">
         <span>HTML Website Builder</span>
-      </a>. 
-    </section>
-  </body>
+    </a>.
+</section>
+</body>
 </html>

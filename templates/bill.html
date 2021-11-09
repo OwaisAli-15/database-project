@@ -3,10 +3,18 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Book Room, My Bookings">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
-    <title>roomtype</title>
+    <title>reservation</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/nicepage.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/Log-In.css') }}" media="screen">
     <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/jquery.js') }}"
@@ -25,7 +33,7 @@
         "logo": "images/BUITEMS_logo.png"
     }</script>
     <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="roomtype">
+    <meta property="og:title" content="reservation">
     <meta property="og:type" content="website">
 </head>
 <body class="u-body">
@@ -65,41 +73,35 @@
                         <g></g></svg>
                 </a>
             </div>
-            <div class="u-custom-menu u-nav-container">
-                <ul class="u-nav u-spacing-30 u-unstyled u-nav-1">
 
-                    {% if type == "Set As Admin"%}
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/room" style="padding: 10px 0px;">Room</a>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Buitems Guest House</a>
+                    </div>
+                    <ul class="nav navbar-nav">
 
-                        <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/roomtype" style="padding: 10px 0px;">roomtype</a>
+                        <li><a href="/reservation">Reservation</a></li>
+                        {% if type == "Set As Admin"%}
+                        <li><a href="/room">Room</a></li>
+                        <li><a href="/roomtype">Room Type</a></li>
+                        <li><a href="/externalservice">External Service</a></li>
+                        <br>
+                        <li><a href="/servicecharges">Service Charges</a></li>
+                        <li><a href="/servicehistory">Service History</a></li>
+                        <li><a href="/pendings">Pending</a></li>
+                        <li class="active"><a href="/bill">Billing</a></li>
+                        {% endif%}
+                        <li><a href="/logout">Logout</a></li>
 
-                    <li><a
-                            class="link-primary"
-                            href="/externalservice" style="padding: 10px 0px;">ExternalService</a>
-                    <br>
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/servicecharges" style="padding: 10px 0px;">servicecharges</a>
+                    </ul>
+                </div>
+            </nav>
 
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/servicehistory" style="padding: 10px 0px;">servicehistory</a>
 
-                    {% endif %}
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href="/bill" style="padding: 10px 0px;">Billing</a>
+            <div>
 
-                    <li class="u-nav-item"><a
-                            class="u-border-6 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-radius-4 u-text-active-palette-1-base u-text-grey-90 u-text-hover-grey-90"
-                            href='/logout' style="padding: 10px 0px;">Log Out</a>
-                    </li>
-
-                </ul>
+                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
             <div class="u-custom-menu u-nav-container-collapse">
                 <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
@@ -118,8 +120,6 @@
                         </ul>
                     </div>
                 </div>
-                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-            </div>
                 <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
             </div>
         </nav>
