@@ -127,6 +127,33 @@ def login_required(f):
 
 
 
+@app.route('/home', methods=["GET", "POST"])
+def Home():
+
+     if request.method  == "GET":
+        return render_template("Main2.html")
+     else:
+
+        return  redirect(url_for('Home'))
+
+
+@app.route('/Details', methods=["GET", "POST"])
+def Details():
+
+     if request.method  == "GET":
+        return render_template("GuestRoomDetails.html")
+     else:
+
+        return  redirect(url_for('reservation'))\
+
+@app.route('/logout', methods=["GET"])
+def logout():
+
+    session.clear()
+    return  redirect(url_for('reservation'))
+
+
+
 
 
 
@@ -160,12 +187,35 @@ def reservation():
         if session.get("user_id") is None:
             return redirect(url_for('register'))
         print("Session: ", session)
-        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout, reservation.reservationid, reservation.status from roomres join room on roomres.roomid = room.roomid join reservation on reservation.reservationid = roomres.reservationid where identification = ? or resforid = ? order by status", ([session["user_id"] , session["user_id"]])).fetchall()
+        allbookings = bd.execute("Select room.roomname, roomres.checkin, roomres.checkout, reservation.reservationid, reservation.status, reservation.identification, reservation.resforid from roomres join room on roomres.roomid = room.roomid join reservation on reservation.reservationid = roomres.reservationid where identification = ? or resforid = ? order by status", ([session["user_id"] , session["user_id"]])).fetchall()
+
+
+        allbookings2 = []
 
         for a in allbookings:
+            checkin2 = a[1].replace('-', '')
+            checkout2 = a[2].replace('-', '')
+            print(checkin2)
+
+            datetimeobject = datetime.strptime(checkin2, '%Y%m%d')
+            datetimeobject2 = datetime.strptime(checkout2, '%Y%m%d')
+            print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
+            checkindateSet = datetimeobject.strftime('%d-%m-%Y')
+            checkoutdateSet = datetimeobject2.strftime('%d-%m-%Y')
+
+            print("CHECK IN:", checkindateSet, "\nCHECK OUT: ", checkoutdateSet)
+
+            a = list(a)
+
+            a[1] = checkindateSet
+            a[2] = checkoutdateSet
             print(a)
 
-        return render_template("reservation.html", allbookings=allbookings)
+            a = tuple(a)
+            allbookings2.append(a)
+        print("ALL: ", allbookings2)
+
+        return render_template("reservation.html", allbookings=allbookings2, id=session["user_id"])
     else:
 
         cnic = request.form.get('name')
@@ -181,19 +231,6 @@ def reservation():
         print("checkout: ", checkout)
         print("checkin: ", checkin)
         print("room: ", room)
-
-
-        checkin2 = checkin.replace('-', '')
-        checkout2 = checkout.replace('-', '')
-        print(checkin2)
-
-        datetimeobject = datetime.strptime(checkin2, '%Y%m%d')
-        datetimeobject2 = datetime.strptime(checkout2, '%Y%m%d')
-        print("WORK: ", datetimeobject.strftime('%d-%m-%Y'))
-        checkindateSet = datetimeobject.strftime('%d-%m-%Y')
-        checkoutdateSet = datetimeobject2.strftime('%d-%m-%Y')
-
-        print("CHECK IN:", checkindateSet, "\nCHECK OUT: ", checkoutdateSet)
 
         bd.execute("insert into reservation (purposeofvisit, reference, identification, status, resforid) values (?, ?, ?, ?,?);", ([pov, reference, session["user_id"], "Active", cnic]))
         bd.commit()
@@ -355,6 +392,10 @@ def Room():
         return redirect (url_for('Room'))
 
 
+
+
+
+
 @app.route('/servicehistory', methods=["GET", "POST"])
 def servicehistory():
     if session.get("user_id") is None:
@@ -450,19 +491,46 @@ def bill():
         ).fetchall()
         bd.commit()
 
+        total = 0
+        num = 0
+
+        for a in dates:
+            if a is not None:
+                total += int(a[4])
+        print("TOTAL: ", total)
+
         services = bd.execute(
-            " select quantity, servicename, servicecharges from servicehistory join services using (serviceid) where reservationid = ?",
+            " select quantity, servicename, servicecharges, quantity * servicecharges from servicehistory join services using (serviceid) where reservationid = ?",
             ([reservation])
         ).fetchall()
+
+        for a in services:
+            if a[0] is not None:
+                total += int(a[0]) * int(a[2])
+
+        print("TOTAL: ", total)
 
         extservice = bd.execute(
-            "select externalservicequantity, externalservicename, externalservicerate from externalservice where reservationid = ?",
+            "select externalservicequantity, externalservicename, externalservicerate, externalservicequantity * externalservicerate from externalservice where reservationid = ?",
             ([reservation])
         ).fetchall()
 
-        print("DATE:", extservice)
 
-        return render_template('bill.html', dates=dates, allres=allres, services=services, extservice=extservice)
+
+
+        print("SSSSSSSSSSSSSSSSSSSSSSSSSSS: ", services)
+
+        for a in extservice:
+            if a[0] is not None:
+                total += int(str(a[0])) * int(str(a[2]))
+                if a[0] is None:
+                    dates.remove(dates[num])
+                num += 1
+        print("TOTAL: ", total)
+
+        print("Ext:", extservice)
+
+        return render_template('bill.html', dates=dates, allres=allres, services=services, extservice=extservice,total=total, reservation=reservation)
 
 
 @app.route('/servicecharges', methods=["GET", "POST"])
