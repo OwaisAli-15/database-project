@@ -7,10 +7,10 @@
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>GuestRoomDetails</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/nicepage.css') }}" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/FrontPage/nicepage2.css') }}" media="screen">
 <link rel="stylesheet" href="{{ url_for('static', filename='basic/css/GuestRoomDetails.css') }}" media="screen">
-    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/jquery.js') }}" defer=""></script>
-    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/nicepage.js') }}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/FrontPage/jquery2.js') }}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='basic/js/FrontPage/nicepage2.js') }}" defer=""></script>
     <meta name="generator" content="Nicepage 3.27.0, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
     <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,200,300,400,500,600,700,800,900">
@@ -130,7 +130,7 @@
               <div class="u-align-center u-container-style u-layout-cell u-size-19 u-layout-cell-2">
                 <div class="u-container-layout u-container-layout-2">
                   <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="315" data-image-height="309">
-                    <img src="images/BUITEMS_logo.png" class="u-logo-image u-logo-image-1">
+                    <img src="{{ url_for('static', filename='basic/images/BUITEMS_logo.png')}}" class="u-logo-image u-logo-image-1">
                   </a>
                   <h5 class="u-text u-text-default u-text-3">CONTACT US</h5>
                 </div>

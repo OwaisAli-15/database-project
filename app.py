@@ -137,6 +137,15 @@ def Home():
         return  redirect(url_for('Home'))
 
 
+@app.route('/main', methods=["GET", "POST"])
+def Main():
+
+     if request.method  == "GET":
+        return render_template("book.html")
+     else:
+
+        return  redirect(url_for('Main'))
+
 @app.route('/Details', methods=["GET", "POST"])
 def Details():
 
@@ -633,7 +642,7 @@ def execute():
     # a = bd.execute("Delete from  servicehistory;").fetchall()
     # bd.commit()
 
-    bd.execute("Alter table reservation add paid Text")
+    bd.execute(".schema reservation")
     bd.commit()
 
     # for b in a:
