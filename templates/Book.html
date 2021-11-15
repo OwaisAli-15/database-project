@@ -85,15 +85,14 @@
                     </li>
                     <li class="u-nav-item"><a
                             class="u-button-style u-nav-link u-text-active-palette-3-dark-1 u-text-hover-palette-3-dark-1 u-text-palette-3-dark-1"
-                            href="Contact.html" style="padding: 10px 0px;">Contact</a>
+                            href="Contact.html" style="padding: 10px 0px;">Reservation</a>
                     </li>
+                    {% block navbar %}
+
+                    {% endblock %}
                     <li class="u-nav-item"><a
                             class="u-button-style u-nav-link u-text-active-palette-3-dark-1 u-text-hover-palette-3-dark-1 u-text-palette-3-dark-1"
-                            href="Book.html" style="padding: 10px 0px;">Book</a>
-                    </li>
-                    <li class="u-nav-item"><a
-                            class="u-button-style u-nav-link u-text-active-palette-3-dark-1 u-text-hover-palette-3-dark-1 u-text-palette-3-dark-1"
-                            href="Main.html" style="padding: 10px 0px;">Main</a>
+                            href="Main.html" style="padding: 10px 0px;">Log Out</a>
                     </li>
                 </ul>
             </div>
@@ -157,16 +156,7 @@
                             </div><!--/position-->
                         </div>
                     </div>
-                    <div class="u-align-center u-container-style u-layout-cell u-size-19 u-layout-cell-2">
-                        <div class="u-container-layout u-container-layout-2">
-                            <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="315"
-                               data-image-height="309">
-                                <img src="{{ url_for('static', filename='basic/images/BUITEMS_logo.png') }}"
-                                     class="u-logo-image u-logo-image-1">
-                            </a>
-                            <h5 class="u-text u-text-default u-text-3">CONTACT US</h5>
-                        </div>
-                    </div>
+
                     <div class="u-align-center-sm u-align-center-xs u-align-left-lg u-align-left-md u-align-left-xl u-container-style u-layout-cell u-right-cell u-size-21 u-layout-cell-3">
                         <div class="u-container-layout u-valign-top u-container-layout-3">
                             <p class="u-text u-text-palette-3-dark-2 u-text-4"> P.O. Box 888 333, Burj Khalifa<br>1
@@ -235,16 +225,13 @@
         </div>
     </div>
 </footer>
-<section class="u-backlink u-clearfix u-grey-80">
-    <a class="u-link" href="https://nicepage.com/website-templates" target="_blank">
-        <span>Website Templates</span>
-    </a>
-    <p class="u-text">
-        <span>created with</span>
-    </p>
-    <a class="u-link" href="https://nicepage.com/" target="_blank">
-        <span>Website Builder Software</span>
-    </a>.
-</section>
+
 </body>
+
+<script>
+    {% block script %}
+
+    {% endblock %}
+</script>
+
 </html>

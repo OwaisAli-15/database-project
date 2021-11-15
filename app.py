@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask_ngrok import run_with_ngrok
+
 import socketio
 from flask import Flask, render_template, request, redirect, url_for, session,flash
 import os
@@ -31,7 +31,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-run_with_ngrok(app)
+
 
 socketio = SocketIO(app, manage_session=False)
 app.config['SECURITY_RECOVERABLE'] = True
@@ -46,11 +46,8 @@ bd = sqlite3.connect('sample_database6.db', check_same_thread=False)
 print ("Opened database successfully")
 
 
-
-# socketio = SocketIO(app, cors_allowed_origins='*')
-# SocketIO(app,cors_allowed_origins="http://localhost")
-# Session(app)
-
+#Socket IO Function in Reservation Page
+# When user chooses a
 @socketio.on('message')
 def handleMessage(date):
 
